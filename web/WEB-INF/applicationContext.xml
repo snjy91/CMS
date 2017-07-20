@@ -9,17 +9,32 @@
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-    <!--bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-          p:location="/WEB-INF/jdbc.properties" />
-
-<bean id="dataSource"
-    class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-    p:driverClassName="${jdbc.driverClassName}"
-    p:url="${jdbc.url}"
-    p:username="${jdbc.username}"
-    p:password="${jdbc.password}" /-->
-
-    <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
+        <bean id="hibernate3AnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		
+		<property name="annotatedClasses">
+			<list>
+				<value>ext.cms.model.LoginBean</value>
+                                <value>ext.cms.model.Patient</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.show_sql">true</prop>
+                                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+                                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/CMS?zeroDateTimeBehavior=convertToNull</prop>
+                                <prop key="hibernate.connection.username">root</prop>
+                                <prop key="hibernate.connection.password">Root@123</prop>  
+                                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                                                       
+			</props>
+		</property>
+	</bean>
+        
+        <bean id="hibernateManager" class="ext.cms.utils.HibernateManagerImpl">
+		<property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory" />
+	</bean>
 
 </beans>
